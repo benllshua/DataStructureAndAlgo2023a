@@ -86,7 +86,7 @@ public class app {
                         System.out.println("invalid input");
                         break;
                     }
-                    String userOperator = userParams[0];
+                    String userOperator = userParams[0].trim();
                     String userLastName = userParams[1].trim();
                     String userId = userParams[2].trim();
                     if (userOperator.equals("+")) {
@@ -101,7 +101,22 @@ public class app {
                 case "6":
                     System.out.println("adding / removing books by format:");
                     System.out.println("lastName id bookCode operator(+/-)");
-                    String[] bookParams = scan.nextLine().trim().toLowerCase().split(" ");
+                    String[] bookParams = scan.nextLine().split(" ");
+                    if (bookParams.length != 4) {
+                        System.out.println("invalid input");
+                        break;
+                    }
+                    String bookUserLastName = bookParams[0].trim();
+                    String bookUserId = bookParams[1].trim();
+                    String bookCodeParam = bookParams[2].trim();
+                    String bookUserOperator = bookParams[3].trim();
+                    if (bookUserOperator.equals("+")) {
+                        library.addBookToUser(bookUserLastName, bookUserId, bookCodeParam);
+                    } else if (bookUserOperator.equals("-")) {
+                        library.removeBookToUser(bookUserLastName, bookUserId, bookCodeParam);
+                    } else {
+                        System.out.println("invalid operator");
+                    }
                     break;
                 // NOT DONE
 

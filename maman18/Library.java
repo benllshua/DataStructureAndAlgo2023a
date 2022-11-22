@@ -28,7 +28,7 @@ public class Library {
             return "the library is empty right now";
         String str = "";
         for (LibraryUser libraryUser : this._users) {
-            str += libraryUser.getId() + " " + libraryUser.getLastName() + " [" + libraryUser.getBooks().length + "]\n";
+            str += libraryUser + "\n";
         }
         return str;
     }
@@ -53,7 +53,6 @@ public class Library {
         LibraryUser user = new LibraryUser(lastName, id);
         if (user.getId() != null)
             this._users.add(user);
-
     }
 
     public void removeUser(String lastName, String id) {
@@ -101,14 +100,50 @@ public class Library {
         int max = 0;
         ArrayList<LibraryUser> users = new ArrayList<LibraryUser>();
         for (LibraryUser user : this._users) {
-            if (user.getBooks().length > max) {
+            int bookAmount = user.getBooks().length;
+            if (bookAmount > max) {
                 users.clear();
-                max = user.getBooks().length;
+                max = bookAmount;
             }
-            users.add(user);
+            if (bookAmount == max) {
+                users.add(user);
+            }
         }
         LibraryUser[] arr = new LibraryUser[users.size()];
         return users.toArray(arr);
+    }
+
+    public void addBookToUser(String lastName, String id, String bookCode) {
+        LibraryUser user = getUserById(id);
+        if (user == null) {
+            System.out.println("JOB FAILD: user with that id does not exist");
+            return;
+        }
+        if (!user.getLastName().equals(lastName)) {
+            System.out.println("JOB FAILD: user lastName and id does not match");
+            return;
+        }
+        LibraryUser userWithThisBook = getUserByBook(bookCode);
+        if (userWithThisBook != null) {
+            String belongs = userWithThisBook.getId().equals(id) ? "this user" : "someome else";
+            System.out.println("JOB FAILD: " + belongs + " has the book");
+            return;
+        }
+        user.addBook(bookCode);
+    }
+
+    public void removeBookToUser(String lastName, String id, String bookCode) {
+        LibraryUser user = getUserById(id);
+        if (user == null) {
+            System.out.println("JOB FAILD: user with that id does not exist");
+            return;
+        }
+        if (!user.getLastName().equals(lastName)) {
+            System.out.println("JOB FAILD: user lastName and id does not match");
+            return;
+        }
+
+        user.removeBook(bookCode);
     }
 
 }
