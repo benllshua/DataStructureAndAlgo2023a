@@ -1,5 +1,7 @@
 package maman18;
 
+import java.util.ArrayList;
+
 /**
  * the LibraryUser class for "Maman18"
  * 
@@ -8,7 +10,7 @@ package maman18;
 public class LibraryUser {
 
     private static String numbersRegex = "[0-9]+";
-    private static String numbersAndCharacterRegex = "^[a-zA-Z0-9_.-]*$";
+    private static String characterRegex = "[a-zA-Z]+";
 
     // variables
     private String _lastName;
@@ -28,17 +30,16 @@ public class LibraryUser {
      * @param id
      */
     public LibraryUser(String lastName, String id) {
-        String trimmedLastName = lastName.trim();
-        String trimmedId = id.trim().replaceAll("", trimmedLastName);
-        if (trimmedLastName.length() == 0) {
+
+        if (!isLastNameValid(lastName)) {
             System.out.println("JOB FAILD: invalid last name");
             return;
         }
-        if (trimmedId.length() != 9) {
+        if (!isIdValid(id)) {
             System.out.println("JOB FAILD: invalid id name");
             return;
         }
-        this._lastName = lastName;
+        this._lastName = lastName.trim();
         this._id = id;
         this._books = new String[10];
         for (int i = 0; i < this._books.length; i++) {
@@ -58,19 +59,25 @@ public class LibraryUser {
     }
 
     public String[] getBooks() {
-        return this._books;
+        ArrayList<String> books = new ArrayList<String>();
+
+        for (String bookCode : this._books) {
+            if (bookCode != "") {
+                books.add(bookCode);
+            }
+        }
+
+        String[] arr = new String[books.size()];
+        return books.toArray(arr);
     }
 
     public String toString() {
-        String str = this._lastName + " (ID:" + this._id + ")\n Books: [";
-        for (int i = 0; i < this._books.length; i++) {
-            if (this._books[i] != "") {
-                str += _books[i] + ",";
-            }
+        String str = this._lastName + " (ID:" + this._id + ")\t Books: [";
+        String[] books = this.getBooks();
+        for (String bookCode : books) {
+            str += bookCode + ",";
         }
-        str += "]";
-
-        return str;
+        return str + "]";
     }
 
     /**
@@ -80,6 +87,10 @@ public class LibraryUser {
      * @param book
      */
     public void addBook(String book) {
+        if (!isBookValid(book)) {
+            System.out.println("JOB FAILED: invalid book code");
+            return;
+        }
 
         for (int i = 0; i < this._books.length; i++) {
             if (book == this._books[i]) {
@@ -103,6 +114,10 @@ public class LibraryUser {
      * @param book
      */
     public void removeBook(String book) {
+        if (!isBookValid(book)) {
+            System.out.println("JOB FAILED: invalid book code");
+            return;
+        }
 
         for (int i = 0; i < this._books.length; i++) {
             if (book == this._books[i]) {
@@ -114,44 +129,49 @@ public class LibraryUser {
         System.out.println("JOB FAILED: user doesn't have the book");
     }
 
-    // static methods
-
     /**
-     * bool function that returns true if the given id allreadyExists in a given
-     * users array
+     * checks if param id is valid
+     * complexity: O(1)
      * 
-     * complexity O(n) - runs throw all given users until founds one
-     * 
-     * @param users LibraryUser[]
-     * @param id    String
+     * @param id
+     * @return boolen
      */
-    public boolean idExists(LibraryUser[] users, String id) {
-        for (int i = 0; i < users.length; i++) {
-            if (id == users[i].getId())
-                return true;
-        }
-        return false;
+    public static boolean isIdValid(String id) {
+        return (id.matches(numbersRegex) && id.length() == 9);
     }
 
     /**
-     * bool function that returns true if the given book allreadyExists in a given
-     * users array
+     * checks if param lastName is valid
+     * complexity: O(1)
      * 
-     * complexity O(n) - runs throw all given users & their books (max 10) until
-     * founds one
-     * 
-     * @param users LibraryUser[]
-     * @param book  String
+     * @param lastName
+     * @return boolen
      */
-    public boolean bookExists(LibraryUser[] users, String book) {
-        for (int i = 0; i < users.length; i++) {
-            String[] userBooks = users[i].getBooks();
-            for (int j = 0; j < userBooks.length; j++) {
-                if (book == userBooks[j])
-                    return true;
-            }
+    public static boolean isLastNameValid(String lastName) {
+        return (lastName.matches(characterRegex) && lastName.trim().length() != 0);
+    }
+
+    /**
+     * checks if param bookCode is valid
+     * complexity: O(1)
+     * 
+     * @param bookCode
+     * @return boolen
+     */
+    public static boolean isBookValid(String bookCode) {
+        if (bookCode.length() != 6)
+            return false;
+        String[] chars = bookCode.split("");
+
+        for (int i = 0; i < 2; i++) {
+            if (!chars[i].matches(characterRegex))
+                return false;
         }
-        return false;
+        for (int i = 2; i < 6; i++) {
+            if (!chars[i].matches(numbersRegex))
+                return false;
+        }
+        return true;
     }
 
 }
