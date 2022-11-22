@@ -52,7 +52,7 @@ public class app {
                 case "2":
                     System.out.println("finding user By Id");
                     System.out.print("userId:");
-                    String id = scan.nextLine().trim().toLowerCase();
+                    String id = scan.nextLine().trim();
                     LibraryUser userById = library.getUserById(id);
                     if (userById != null)
                         System.out.println(userById);
@@ -61,7 +61,7 @@ public class app {
                 case "3":
                     System.out.println("finding which user hase certain book");
                     System.out.print("bookCode:");
-                    String bookCode = scan.nextLine().trim().toLowerCase();
+                    String bookCode = scan.nextLine().trim();
                     LibraryUser userBybook = library.getUserByBook(bookCode);
                     if (userBybook != null)
                         System.out.println(userBybook);
@@ -118,7 +118,6 @@ public class app {
                         System.out.println("invalid operator");
                     }
                     break;
-                // NOT DONE
 
                 default:
                     System.out.println("Invalid input");
