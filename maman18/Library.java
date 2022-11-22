@@ -34,7 +34,7 @@ public class Library {
     }
 
     public void addUser(LibraryUser user) {
-        if (user == null) {
+        if (user == null || user.getId() == null) {
             System.out.println("JOB FAILD: user is null");
             return;
         }
@@ -46,14 +46,36 @@ public class Library {
     }
 
     public void addUser(String lastName, String id) {
+        if (this.getUserById(id) != null) {
+            System.out.println("JOB FAILD: user with that id allready exists");
+            return;
+        }
         LibraryUser user = new LibraryUser(lastName, id);
-        if (user != null)
-            this.addUser(user);
+        if (user.getId() != null)
+            this._users.add(user);
+
+    }
+
+    public void removeUser(String lastName, String id) {
+        LibraryUser user = getUserById(id);
+        if (user == null) {
+            System.out.println("JOB FAILD: user with that id does not exist");
+            return;
+        }
+        if (!user.getLastName().equals(lastName)) {
+            System.out.println("JOB FAILD: user lastName and id does not match");
+            return;
+        }
+
+        Boolean worked = this._users.remove(user);
+        if (!worked) {
+            System.out.println("JOB FAILD: no user found");
+        }
     }
 
     public LibraryUser getUserById(String id) {
         for (LibraryUser user : this._users) {
-            if (user.getId() == id) {
+            if (user.getId().equals(id)) {
                 return user;
             }
         }
@@ -67,7 +89,7 @@ public class Library {
         }
         for (LibraryUser user : this._users) {
             for (String book : user.getBooks()) {
-                if (book == bookCode) {
+                if (book.equals(bookCode)) {
                     return user;
                 }
             }

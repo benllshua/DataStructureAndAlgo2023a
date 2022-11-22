@@ -13,14 +13,20 @@ public class app {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
+        Boolean closed = false;
         Library library = new Library();
 
         System.out
                 .println("Welcome to Ben's librery, here you can add/remove users & books, for help - enter \"help\"");
 
-        while (true) {
+        while (!closed) {
+            System.out.print("> ");
             String userInput = scan.nextLine().trim().toLowerCase();
             switch (userInput) {
+                case "close":
+                    closed = true;
+                    System.out.println("Goodbye :) hope you had fun reading");
+                    break;
                 case "help":
                     System.out.println("commands run by numbers:");
                     System.out.println("1) for printing the library");
@@ -36,6 +42,7 @@ public class app {
                     System.out.println("*users can have max of 10 books");
                     System.out.println("*please be quiet, it's a liberary!");
                     System.out.println("");
+                    System.out.println("to close the library type \"close\" (be careful, data is not saved)");
                     System.out.println("for more help type \"help\" again");
                     break;
 
@@ -46,14 +53,18 @@ public class app {
                     System.out.println("finding user By Id");
                     System.out.print("userId:");
                     String id = scan.nextLine().trim().toLowerCase();
-                    System.out.println(library.getUserById(id));
+                    LibraryUser userById = library.getUserById(id);
+                    if (userById != null)
+                        System.out.println(userById);
                     break;
 
                 case "3":
                     System.out.println("finding which user hase certain book");
                     System.out.print("bookCode:");
                     String bookCode = scan.nextLine().trim().toLowerCase();
-                    System.out.println(library.getUserByBook(bookCode));
+                    LibraryUser userBybook = library.getUserByBook(bookCode);
+                    if (userBybook != null)
+                        System.out.println(userBybook);
                     break;
                 case "4":
                     System.out.println("users with most books:");
@@ -70,9 +81,22 @@ public class app {
                 case "5":
                     System.out.println("adding / removing users by format:");
                     System.out.println("operator(+/-) lastName id");
-                    String[] userParams = scan.nextLine().trim().toLowerCase().split(" ");
+                    String[] userParams = scan.nextLine().split(" ");
+                    if (userParams.length != 3) {
+                        System.out.println("invalid input");
+                        break;
+                    }
+                    String userOperator = userParams[0];
+                    String userLastName = userParams[1].trim();
+                    String userId = userParams[2].trim();
+                    if (userOperator.equals("+")) {
+                        library.addUser(userLastName, userId);
+                    } else if (userOperator.equals("-")) {
+                        library.removeUser(userLastName, userId);
+                    } else {
+                        System.out.println("invalid operator");
+                    }
                     break;
-                // NOT DONE
 
                 case "6":
                     System.out.println("adding / removing books by format:");
@@ -87,6 +111,8 @@ public class app {
             }
             System.out.println("");
         }
+
+        scan.close();
     }
 
 }

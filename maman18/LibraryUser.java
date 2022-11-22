@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class LibraryUser {
 
-    private static String numbersRegex = "[0-9]+";
-    private static String characterRegex = "[a-zA-Z]+";
+    private static final String numbersRegex = "[0-9]+";
+    private static final String characterRegex = "[a-zA-Z]+";
 
     // variables
     private String _lastName;
@@ -71,8 +71,22 @@ public class LibraryUser {
         return books.toArray(arr);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final LibraryUser other = (LibraryUser) obj;
+        return this._id.equals(other._id);
+    }
+
     public String toString() {
-        String str = this._lastName + " (ID:" + this._id + ")\t Books: [";
+        String str = this._id + " " + this._lastName + " Books: [";
         String[] books = this.getBooks();
         for (String bookCode : books) {
             str += bookCode + ",";
@@ -93,11 +107,11 @@ public class LibraryUser {
         }
 
         for (int i = 0; i < this._books.length; i++) {
-            if (book == this._books[i]) {
+            if (book.equals(this._books[i])) {
                 System.out.println("JOB FAILED: user allready has the book");
                 return;
             }
-            if (this._books[i] == "") {
+            if (this._books[i].equals("")) {
                 this._books[i] = book;
                 System.out.println("book added successfully");
                 return;
@@ -120,7 +134,7 @@ public class LibraryUser {
         }
 
         for (int i = 0; i < this._books.length; i++) {
-            if (book == this._books[i]) {
+            if (book.equals(this._books[i])) {
                 this._books[i] = "";
                 System.out.println("book removed successfully");
                 return;
