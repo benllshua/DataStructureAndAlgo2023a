@@ -13,8 +13,8 @@ public class app {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
-        Boolean closed = false;
         Library library = new Library();
+        Boolean closed = false;
 
         System.out
                 .println("Welcome to Ben's librery, here you can add/remove users & books, for help - enter \"help\"");
@@ -56,21 +56,29 @@ public class app {
                     LibraryUser userById = library.getUserById(id);
                     if (userById != null)
                         System.out.println(userById);
+                    else
+                        System.out.println("JOB FAILD: user not found");
                     break;
 
                 case "3":
-                    System.out.println("finding which user hase certain book");
+                    System.out.println("finding which user has certain book");
                     System.out.print("bookCode:");
                     String bookCode = scan.nextLine().trim();
                     LibraryUser userBybook = library.getUserByBook(bookCode);
+                    if (!LibraryUser.isBookValid(bookCode)) {
+                        System.out.println("JOB FAILD: invalid book code");
+
+                    }
                     if (userBybook != null)
                         System.out.println(userBybook);
+                    else
+                        System.out.println("JOB FAILD: user with that book was not found");
                     break;
                 case "4":
                     System.out.println("users with most books:");
                     LibraryUser[] users = library.getUserWithMostBooks();
                     if (users.length == 0)
-                        System.out.println("no users");
+                        System.out.println("JOB FAILD: no users in the library");
                     else
                         System.out.println(
                                 "found " + users.length + " users with " + users[0].getBooks().length + " books:");
@@ -83,7 +91,7 @@ public class app {
                     System.out.println("operator(+/-) lastName id");
                     String[] userParams = scan.nextLine().split(" ");
                     if (userParams.length != 3) {
-                        System.out.println("invalid input");
+                        System.out.println("JOB FAILD: invalid input");
                         break;
                     }
                     String userOperator = userParams[0].trim();
@@ -94,7 +102,7 @@ public class app {
                     } else if (userOperator.equals("-")) {
                         library.removeUser(userLastName, userId);
                     } else {
-                        System.out.println("invalid operator");
+                        System.out.println("JOB FAILD: invalid operator");
                     }
                     break;
 
@@ -103,7 +111,7 @@ public class app {
                     System.out.println("lastName id bookCode operator(+/-)");
                     String[] bookParams = scan.nextLine().split(" ");
                     if (bookParams.length != 4) {
-                        System.out.println("invalid input");
+                        System.out.println("JOB FAILD: invalid input");
                         break;
                     }
                     String bookUserLastName = bookParams[0].trim();
@@ -115,12 +123,12 @@ public class app {
                     } else if (bookUserOperator.equals("-")) {
                         library.removeBookToUser(bookUserLastName, bookUserId, bookCodeParam);
                     } else {
-                        System.out.println("invalid operator");
+                        System.out.println("JOB FAILD: invalid operator");
                     }
                     break;
 
                 default:
-                    System.out.println("Invalid input");
+                    System.out.println("JOB FAILD: Invalid input");
                     break;
             }
             System.out.println("");

@@ -36,7 +36,7 @@ public class LibraryUser {
             return;
         }
         if (!isIdValid(id)) {
-            System.out.println("JOB FAILD: invalid id name");
+            System.out.println("JOB FAILD: invalid id");
             return;
         }
         this._lastName = lastName.trim();

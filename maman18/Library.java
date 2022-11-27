@@ -82,10 +82,6 @@ public class Library {
     }
 
     public LibraryUser getUserByBook(String bookCode) {
-        if (!LibraryUser.isBookValid(bookCode)) {
-            System.out.println("JOB FAILD: invalid bookCode");
-            return null;
-        }
         for (LibraryUser user : this._users) {
             for (String book : user.getBooks()) {
                 if (book.equals(bookCode)) {
